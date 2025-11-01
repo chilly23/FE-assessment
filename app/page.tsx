@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Settings, Command, Copy, RotateCw, Edit2, Send, Menu, X } from 'lucide-react';
+import { Search, Plus, Settings, Command, Copy, RotateCw, Edit2, Send, Menu, X, User, Mail, Linkedin, Github, Download } from 'lucide-react';
 
 // Mock data & utils
 const genId = () => Math.random().toString(36).slice(2);
@@ -65,6 +65,7 @@ export default function App() {
   const [showSearch, setShowSearch] = useState(false);
   const [selIdx, setSelIdx] = useState(0);
   const [stickyQ, setStickyQ] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -247,6 +248,14 @@ export default function App() {
     );
   };
 
+  const downloadResume = () => {
+    // Mock resume download - in production, link to actual PDF
+    const link = document.createElement('a');
+    link.href = '/resume.pdf'; // Place your resume.pdf in public folder
+    link.download = 'Velan_Resume.pdf';
+    link.click();
+  };
+
   return (
     <div className="flex h-screen bg-white text-black">
       {/* Sidebar */}
@@ -278,6 +287,13 @@ export default function App() {
             <Menu size={20} />
           </button>
           <h2 className="text-lg font-semibold flex-1">{activeChat?.title || 'Chat'}</h2>
+          <button 
+            onClick={() => setShowProfile(true)} 
+            className="px-4 py-2 border border-black hover:bg-gray-100 flex items-center gap-2"
+          >
+            <User size={16} />
+            View my Profile
+          </button>
         </div>
 
         {/* Sticky Question */}
@@ -362,6 +378,70 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Profile Modal */}
+      {showProfile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowProfile(false)}>
+          <div className="bg-white border-2 border-black w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold">Profile</h3>
+              <button onClick={() => setShowProfile(false)} className="p-1 hover:bg-gray-100">
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-gray-300">
+                <div className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                  V
+                </div>
+                <div>
+                  <h4 className="text-xl font-semibold">Velan</h4>
+                  <p className="text-sm text-gray-600">Frontend Developer</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <a 
+                  href="mailto:velane929@gmail.com"
+                  className="flex items-center gap-3 p-3 hover:bg-gray-50 border border-gray-300 transition-colors"
+                >
+                  <Mail size={20} />
+                  <span className="text-sm">velane929@gmail.com</span>
+                </a>
+
+                <a 
+                  href="https://www.linkedin.com/in/velan-e-40141721b/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-3 hover:bg-gray-50 border border-gray-300 transition-colors"
+                >
+                  <Linkedin size={20} />
+                  <span className="text-sm">linkedin.com/in/velan-e</span>
+                </a>
+
+                <a 
+                  href="https://github.com/chilly23"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-3 hover:bg-gray-50 border border-gray-300 transition-colors"
+                >
+                  <Github size={20} />
+                  <span className="text-sm">github.com/chilly23</span>
+                </a>
+              </div>
+
+              <button 
+                onClick={downloadResume}
+                className="w-full mt-4 px-4 py-3 bg-black text-white hover:bg-gray-800 flex items-center justify-center gap-2 font-semibold"
+              >
+                <Download size={20} />
+                Download Resume
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Command Menu */}
       {showCmd && (
